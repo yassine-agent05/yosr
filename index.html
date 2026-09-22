@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>The Journey of Us | Happy Birthday Yosr</title>
+  <meta name="description" content="A little universe made for Yosr, with love from Yassine and Elee.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    :root {
+      --ink: #171521;
+      --night: #100d18;
+      --violet: #8f72ff;
+      --coral: #ff7b68;
+      --cream: #fff7e9;
+      --paper: #fffdf7;
+      --muted: #6d6475;
+      --line: rgba(23, 21, 33, .12);
+      --serif: 'Playfair Display', Georgia, serif;
+      --sans: 'DM Sans', sans-serif;
+      --mono: 'DM Mono', monospace;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; scroll-snap-type: y proximity; }
+    body { margin: 0; color: var(--ink); background: var(--cream); font-family: var(--sans); overflow-x: hidden; overscroll-behavior-y: none; }
+    button { font: inherit; cursor: pointer; }
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+    .hero, .section, .finale { scroll-snap-align: start; }
+    .hero { min-height: 100svh; position: relative; overflow: hidden; display: grid; place-items: center; background: radial-gradient(circle at 52% 42%, #302445 0, #171326 35%, var(--night) 76%); color: #fff9ef; }
+    .hero::before { content: ''; position: absolute; inset: 0; opacity: .22; background-image: linear-gradient(rgba(255,255,255,.06) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.06) 1px, transparent 1px); background-size: 48px 48px; mask-image: radial-gradient(circle at center, black, transparent 72%); }
+    .hero-content { z-index: 2; width: min(880px, 90vw); text-align: center; padding: 56px 0 76px; animation: rise .9s ease both; }
+    .eyebrow, .section-kicker { font: 500 11px var(--mono); letter-spacing: .18em; text-transform: uppercase; }
+    .hero .eyebrow { color: #c9bcff; margin-bottom: 24px; }
+    h1, h2, h3, p { margin-top: 0; }
+    h1 { font: 700 clamp(4rem, 12vw, 9.5rem)/.88 var(--serif); letter-spacing: -.07em; margin-bottom: 30px; }
+    h1 em { color: var(--coral); font-weight: 600; }
+    .hero-copy { max-width: 430px; margin: 0 auto 36px; color: #bdb4c8; font-size: 15px; line-height: 1.7; }
+    .hero-copy strong { color: #fff9ef; font-weight: 600; }
+    .origin-note { max-width: 390px; margin: -10px auto 28px; color: #8e829c; font: 12px/1.7 var(--mono); }
+    .origin-note span { color: #ffad9e; }
+    .open-button { display: inline-flex; align-items: center; gap: 14px; color: #171521; background: #fff9ef; border: 0; border-radius: 999px; padding: 16px 21px 16px 24px; font-weight: 700; box-shadow: 0 0 0 7px rgba(255,255,255,.08), 0 14px 44px rgba(255,123,104,.25); transition: transform .25s ease, box-shadow .25s ease; }
+    .open-button:hover { transform: translateY(-4px); box-shadow: 0 0 0 9px rgba(255,255,255,.1), 0 20px 55px rgba(255,123,104,.35); }
+    .open-button i { background: var(--coral); color: white; padding: 9px; border-radius: 50%; width: 34px; height: 34px; }
+    .orbit { position: absolute; inset: 0; pointer-events: none; }
+    .particle { position: absolute; width: 4px; height: 4px; border-radius: 50%; background: #ffe4a9; box-shadow: 0 0 16px 3px rgba(255, 220, 150, .8); animation: drift var(--duration) ease-in-out infinite alternate; opacity: var(--opacity); }
+    .scroll-note { position: absolute; bottom: 25px; color: #766b87; font: 11px var(--mono); letter-spacing: .15em; text-transform: uppercase; }
+    .scroll-note::after { content: ''; display: block; width: 1px; height: 34px; margin: 10px auto 0; background: linear-gradient(#766b87, transparent); animation: pulse-line 1.8s ease-in-out infinite; }
+    .journey-progress { position: fixed; inset: 0 0 auto; z-index: 20; height: 3px; background: rgba(255,255,255,.08); pointer-events: none; }
+    .journey-progress span { display: block; width: 100%; height: 100%; background: linear-gradient(90deg, var(--coral), #f7c873, var(--violet)); transform: scaleX(0); transform-origin: left; }
+    .act-marker { position: fixed; z-index: 19; right: 25px; bottom: 26px; display: flex; align-items: center; gap: 10px; color: rgba(255, 253, 247, .72); mix-blend-mode: difference; font: 10px var(--mono); letter-spacing: .12em; text-transform: uppercase; pointer-events: none; }
+    .act-marker i { width: 7px; height: 7px; border-radius: 50%; background: var(--coral); box-shadow: 0 0 0 5px rgba(255,123,104,.16); }
+    .message-rain { position: fixed; inset: 0; z-index: 1; display: grid; grid-template-columns: repeat(5, 1fr); overflow: hidden; pointer-events: none; opacity: .11; mix-blend-mode: multiply; }
+    .message-rain-column { position: relative; height: 150%; transform: translateY(-35%); animation: message-fall var(--rain-speed) linear infinite; }
+    .message-rain-column:nth-child(even) { animation-delay: var(--rain-delay); }
+    .message-rain-column span { display: block; margin: 0 auto 96px; color: var(--rain-color); font: 500 clamp(10px, 1.1vw, 14px) var(--mono); letter-spacing: .14em; text-align: center; text-transform: uppercase; white-space: nowrap; writing-mode: vertical-rl; transform: rotate(180deg); }
+    .message-rain-column span:nth-child(2n) { color: var(--rain-accent); }
+    @keyframes message-fall { from { transform: translateY(-35%); } to { transform: translateY(0); } }
+    .section { min-height: 100svh; padding: 112px max(24px, calc((100vw - 1100px) / 2)); position: relative; }
+    .section::after { content: ''; position: absolute; inset: 0; z-index: 0; pointer-events: none; opacity: .35; background-image: radial-gradient(rgba(23,21,33,.13) .7px, transparent .7px); background-size: 8px 8px; mask-image: linear-gradient(to bottom, transparent, black 25%, transparent 90%); }
+    .section-content { position: relative; z-index: 1; transition: opacity .5s ease, filter .5s ease, transform .5s ease; }
+    .section.is-locked .section-content { opacity: .08; filter: blur(10px); pointer-events: none; user-select: none; transform: scale(.985); }
+    .unlock-gate { position: absolute; inset: 0; z-index: 4; display: grid; place-items: center; padding: 28px; background: rgba(255, 247, 233, .82); backdrop-filter: blur(13px); transition: opacity .45s ease, visibility .45s ease; }
+    .unlock-gate[hidden] { display: none; }
+    .unlock-card { width: min(430px, 100%); padding: 34px; text-align: center; background: rgba(255, 253, 247, .88); border: 1px solid rgba(23, 21, 33, .13); box-shadow: 0 24px 70px rgba(68, 44, 36, .14); }
+    .unlock-card .lock-icon { width: 44px; height: 44px; display: grid; place-items: center; margin: 0 auto 20px; color: #fff9ef; background: var(--coral); border-radius: 50%; }
+    .unlock-card h3 { margin-bottom: 10px; font: 600 31px/.98 var(--serif); letter-spacing: -.04em; }
+    .unlock-card p { color: var(--muted); font-size: 13px; line-height: 1.6; margin-bottom: 21px; }
+    .unlock-card form { display: flex; gap: 8px; }
+    .unlock-card input { min-width: 0; flex: 1; border: 1px solid var(--line); background: white; padding: 13px 14px; color: var(--ink); font: 14px var(--mono); outline: none; }
+    .unlock-card input:focus { border-color: var(--coral); box-shadow: 0 0 0 3px rgba(255, 123, 104, .16); }
+    .unlock-card button { border: 0; padding: 0 16px; background: var(--ink); color: #fff9ef; font-weight: 700; }
+    .unlock-hint { display: block; min-height: 18px; margin-top: 13px; color: #9a635c; font: 11px var(--mono); }
+    .unlock-error { color: #c44f55; }
+    .booth-wrap .unlock-gate { background: rgba(27, 23, 36, .88); }
+    .booth-wrap .unlock-card { background: rgba(36, 32, 47, .95); border-color: #51455e; }
+    .booth-wrap .unlock-card h3 { color: #fff9ef; }
+    .booth-wrap .unlock-card p { color: #b4aabd; }
+    .booth-wrap .unlock-card input { background: #1b1724; border-color: #51455e; color: #fff9ef; }
+    .booth-wrap .unlock-card .lock-icon { background: #ff7b68; }
+    .booth-wrap .unlock-hint { color: #ff9b8d; }
+    .finale.is-locked { min-height: 100svh; }
+    .finale .unlock-gate { background: rgba(242, 184, 149, .88); }
+    .paper-section { background: var(--cream); position: relative; }
+    .section-heading { display: flex; align-items: end; justify-content: space-between; gap: 28px; margin-bottom: 50px; }
+    .section-heading h2 { max-width: 580px; font: 600 clamp(2.6rem, 6vw, 5rem)/.95 var(--serif); letter-spacing: -.055em; margin: 10px 0 0; }
+    .section-kicker { color: #9a635c; }
+    .section-intro { max-width: 290px; color: var(--muted); line-height: 1.7; margin: 0; }
+    .reveal { opacity: 0; transform: translateY(28px); transition: opacity .85s cubic-bezier(.22,1,.36,1), transform .85s cubic-bezier(.22,1,.36,1); }
+    .reveal.is-visible { opacity: 1; transform: translateY(0); }
+    .reveal-delay-1 { transition-delay: .12s; }
+    .reveal-delay-2 { transition-delay: .22s; }
+    .scrapbook-layout { display: grid; grid-template-columns: minmax(0, 1fr) 270px; gap: 70px; align-items: center; }
+    .stack-stage { min-height: 520px; position: relative; display: grid; place-items: center; overflow: hidden; }
+    .memory-card { position: absolute; width: min(420px, 76vw); padding: 14px 14px 22px; background: var(--paper); box-shadow: 0 18px 40px rgba(52, 34, 23, .16); transform: rotate(var(--rotation)); transition: transform .45s ease, opacity .35s ease; }
+    .memory-card.is-current { z-index: 5; transform: rotate(0deg) translateY(-6px); }
+    .memory-card.is-current:hover { transform: rotate(-1deg) translateY(-13px) scale(1.015); box-shadow: 0 25px 50px rgba(52, 34, 23, .2); }
+    .memory-card.is-next { z-index: 3; transform: rotate(5deg) translate(35px, 12px); opacity: .85; }
+    .memory-card.is-last { z-index: 2; transform: rotate(-7deg) translate(-32px, 18px); opacity: .68; }
+    .memory-card.is-hidden { z-index: 1; opacity: 0; transform: translateX(90px) rotate(18deg); pointer-events: none; }
+    .memory-image { height: 335px; position: relative; overflow: hidden; display: grid; place-items: center; background: linear-gradient(140deg, var(--image-a), var(--image-b)); }
+    .memory-image::after { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, rgba(255,255,255,.24), transparent 42%, rgba(17, 11, 31, .22)); }
+    .memory-icon { width: 80px; height: 80px; border: 1px solid rgba(255,255,255,.55); border-radius: 50%; display: grid; place-items: center; color: white; z-index: 1; background: rgba(255,255,255,.12); backdrop-filter: blur(5px); }
+    .memory-card:nth-child(1) { --image-a: #f79077; --image-b: #553c91; --rotation: -3deg; }
+    .memory-card:nth-child(2) { --image-a: #e0a65b; --image-b: #d65c77; --rotation: 4deg; }
+    .memory-card:nth-child(3) { --image-a: #4d9a9a; --image-b: #28396e; --rotation: -2deg; }
+    .memory-card:nth-child(4) { --image-a: #9383c9; --image-b: #e78c72; --rotation: 5deg; }
+    .memory-label { display: flex; align-items: center; justify-content: space-between; gap: 15px; margin: 18px 4px 0; color: #7f6370; font: 11px var(--mono); text-transform: uppercase; letter-spacing: .08em; }
+    .memory-card h3 { font: italic 600 25px/1.15 var(--serif); margin: 13px 4px 0; }
+    .stack-controls { display: flex; align-items: center; gap: 12px; margin-top: 25px; }
+    .icon-button { display: grid; place-items: center; width: 43px; height: 43px; border: 1px solid var(--line); background: transparent; color: var(--ink); border-radius: 50%; transition: background .2s, transform .2s; }
+    .icon-button:hover { background: #fff; transform: translateY(-2px); }
+    .counter { font: 11px var(--mono); color: var(--muted); margin-left: 8px; }
+    .memory-note { border-top: 1px solid var(--line); padding-top: 22px; }
+    .memory-note p { font: italic 600 28px/1.2 var(--serif); margin-bottom: 15px; }
+    .memory-note small { color: var(--muted); line-height: 1.7; }
+    .booth-wrap { background: #1b1724; color: white; position: relative; overflow: hidden; }
+    .booth-wrap::before { content: 'PLAY  •  SP  •  04:17'; position: absolute; top: 30px; right: max(24px, calc((100vw - 1100px) / 2)); color: #8f879a; font: 11px var(--mono); letter-spacing: .12em; }
+    .booth-heading { margin-bottom: 45px; }
+    .booth-heading h2 { color: #fff9ef; }
+    .booth-heading .section-kicker { color: #ff9b8d; }
+    .booth-heading .section-intro { color: #93899e; }
+    .booth-tabs { display: inline-flex; padding: 5px; background: #2a2435; border-radius: 999px; margin-bottom: 32px; }
+    .tab { border: 0; color: #9c93a6; background: transparent; padding: 10px 18px; border-radius: 999px; font-size: 13px; transition: .2s; }
+    .tab[aria-selected="true"] { color: var(--ink); background: #fff9ef; }
+    .tape { display: none; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); gap: 34px; align-items: center; padding: 20px; background: #24202f; border: 1px solid #41384d; }
+    .tape.active { display: grid; animation: rise .4s ease both; }
+    .tape-screen { min-height: 360px; display: grid; place-items: center; position: relative; overflow: hidden; background: radial-gradient(circle at 65% 30%, var(--screen-a), var(--screen-b) 70%); }
+    .tape-screen video { width: 100%; height: 100%; min-height: 360px; display: block; object-fit: cover; background: #09070d; }
+    .tape-screen::before { content: ''; position: absolute; inset: 0; opacity: .3; background: repeating-linear-gradient(0deg, transparent 0 3px, rgba(255,255,255,.18) 4px); mix-blend-mode: overlay; }
+    .tape-screen::after { content: 'REC  ●'; position: absolute; top: 16px; left: 18px; color: #ffb6ae; font: 11px var(--mono); letter-spacing: .1em; }
+    .tape-screen .play { z-index: 1; width: 66px; height: 66px; border: 1px solid rgba(255,255,255,.6); border-radius: 50%; display: grid; place-items: center; background: rgba(255,255,255,.12); backdrop-filter: blur(8px); }
+    .tape-copy { padding: 20px 20px 20px 8px; }
+    .tape-copy .role { color: #ff9b8d; font: 11px var(--mono); text-transform: uppercase; letter-spacing: .15em; }
+    .tape-copy h3 { font: 600 48px/.95 var(--serif); margin: 14px 0 18px; }
+    .tape-copy p { color: #b4aabd; line-height: 1.7; max-width: 370px; }
+    .tape-meta { display: flex; gap: 22px; margin-top: 32px; color: #81778c; font: 11px var(--mono); text-transform: uppercase; }
+    .tape-yassine { --screen-a: #d25a62; --screen-b: #36225b; }
+    .tape-elee { --screen-a: #d69757; --screen-b: #3b5368; }
+    .finale { min-height: 85vh; display: grid; place-items: center; text-align: center; position: relative; overflow: hidden; background: #f2b895; }
+    .finale::before { content: ''; position: absolute; width: 100%; height: 100%; background: radial-gradient(circle at 20% 30%, rgba(255,255,255,.42), transparent 22%), radial-gradient(circle at 82% 70%, rgba(255,126,104,.3), transparent 25%); }
+    .finale-content { position: relative; max-width: 690px; padding: 80px 24px; }
+    .finale h2 { font: 700 clamp(3.8rem, 10vw, 8.7rem)/.86 var(--serif); letter-spacing: -.07em; margin: 15px 0 27px; }
+    .finale h2 span { color: #9a3f53; }
+    .letter { max-width: 440px; margin: 0 auto 30px; color: #714e54; line-height: 1.7; }
+    .wish-button { border: 0; background: var(--ink); color: #fff9ef; border-radius: 999px; padding: 17px 25px; font-weight: 700; box-shadow: 0 10px 28px rgba(63, 32, 40, .2); transition: transform .2s, background .2s; }
+    .wish-button:hover { transform: translateY(-3px); background: #3e3046; }
+    .heart { position: fixed; z-index: 10; pointer-events: none; color: #9a3f53; animation: heart-float 2.8s ease-out forwards; }
+    footer { padding: 24px; background: var(--ink); color: #9b91a4; text-align: center; font: 10px var(--mono); letter-spacing: .12em; text-transform: uppercase; }
+    @keyframes rise { from { opacity: 0; transform: translateY(22px); } to { opacity: 1; transform: translateY(0); } }
+    @keyframes drift { from { transform: translate(0, 0) scale(1); } to { transform: translate(var(--x), var(--y)) scale(1.8); } }
+    @keyframes heart-float { from { transform: translateY(0) scale(.7) rotate(0deg); opacity: 1; } to { transform: translateY(-180px) scale(1.4) rotate(20deg); opacity: 0; } }
+    @keyframes pulse-line { 0%, 100% { opacity: .3; transform: scaleY(.7); transform-origin: top; } 50% { opacity: 1; transform: scaleY(1); transform-origin: top; } }
+    @media (max-width: 760px) {
+      .section { padding-top: 80px; padding-bottom: 80px; }
+      .section-heading { display: block; }
+      .section-intro { margin-top: 20px; }
+      .scrapbook-layout { grid-template-columns: 1fr; gap: 28px; }
+      .stack-stage { min-height: 470px; }
+      .memory-image { height: 290px; }
+      .memory-note { max-width: 420px; }
+      .tape { grid-template-columns: 1fr; gap: 10px; padding: 12px; }
+      .tape-screen { min-height: 250px; }
+      .tape-copy { padding: 18px 10px 10px; }
+      .tape-copy h3 { font-size: 40px; }
+      .booth-wrap::before { display: none; }
+      .unlock-card { padding: 28px 20px; }
+      .unlock-card form { flex-direction: column; }
+      .unlock-card button { min-height: 45px; }
+      .act-marker { right: 18px; bottom: 16px; }
+    }
+    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; transition-duration: .01ms !important; } }
+    @media (max-width: 760px) { .message-rain { grid-template-columns: repeat(3, 1fr); opacity: .08; } .message-rain-column:nth-child(4), .message-rain-column:nth-child(5) { display: none; } }
+  </style>
+</head>
+<body>
+  <div class="journey-progress" aria-hidden="true"><span id="journey-progress-fill"></span></div>
+  <div class="act-marker" aria-hidden="true"><i></i><span id="act-marker-label">the entrance</span></div>
+  <div class="message-rain" aria-hidden="true">
+    <div class="message-rain-column" style="--rain-color:#8f72ff;--rain-accent:#ff7b68;--rain-speed:28s;--rain-delay:-9s"><span>Happy Birthday Yosr</span><span>Vivet</span><span>Make a wish</span><span>Love, always</span><span>University days</span></div>
+    <div class="message-rain-column" style="--rain-color:#9a3f53;--rain-accent:#8f72ff;--rain-speed:34s;--rain-delay:-21s"><span>Happy New Year</span><span>Yassine + Elee</span><span>You are irreplaceable</span><span>Stay soft</span><span>Our favorite place</span></div>
+    <div class="message-rain-column" style="--rain-color:#d17b58;--rain-accent:#9a3f53;--rain-speed:31s;--rain-delay:-14s"><span>Happy Birthday Yosr</span><span>Always, really</span><span>Good coffee, bad jokes</span><span>More chapters</span><span>With all our love</span></div>
+    <div class="message-rain-column" style="--rain-color:#8f72ff;--rain-accent:#ff7b68;--rain-speed:39s;--rain-delay:-28s"><span>Where we always meet</span><span>Press play</span><span>Make the wish real</span><span>Happy New Year</span><span>Our little universe</span></div>
+    <div class="message-rain-column" style="--rain-color:#9a3f53;--rain-accent:#d17b58;--rain-speed:30s;--rain-delay:-5s"><span>Yosr, this one is yours</span><span>Vivet</span><span>Laugh forever</span><span>To be continued</span><span>Happy Birthday</span></div>
+  </div>
+  <main>
+    <section class="hero" id="hero" aria-labelledby="hero-title">
+      <div class="orbit" aria-hidden="true">
+        <span class="particle" style="left:12%;top:24%;--x:40px;--y:-34px;--duration:4s;--opacity:.8"></span>
+        <span class="particle" style="left:23%;top:68%;--x:-24px;--y:-60px;--duration:6s;--opacity:.5"></span>
+        <span class="particle" style="left:76%;top:23%;--x:-36px;--y:45px;--duration:5s;--opacity:.7"></span>
+        <span class="particle" style="left:88%;top:70%;--x:20px;--y:-50px;--duration:7s;--opacity:.55"></span>
+        <span class="particle" style="left:64%;top:78%;--x:-15px;--y:-36px;--duration:4.5s;--opacity:.7"></span>
+        <span class="particle" style="left:39%;top:16%;--x:28px;--y:28px;--duration:5.5s;--opacity:.5"></span>
+      </div>
+      <div class="hero-content">
+        <div class="eyebrow">A tiny universe, made for</div>
+        <h1 id="hero-title">Yosr,<br><em>this one is yours.</em></h1>
+        <p class="hero-copy">A little journey through the moments, chaos, and warmth that make you so completely irreplaceable. With love from <strong>Yassine &amp; Elee</strong>.</p>
+        <p class="origin-note">Before all the stories, there was one place: <span>the university.</span> Somehow, we kept meeting there. Always.</p>
+        <button class="open-button" id="open-button">Touch to open Yosr's universe <i data-lucide="arrow-down-right"></i></button>
+      </div>
+      <div class="scroll-note">begin the journey ↓</div>
+    </section>
+
+    <section class="section paper-section is-locked" id="scrapbook" aria-labelledby="scrapbook-title">
+      <div class="section-content">
+        <div class="section-heading reveal">
+          <div><div class="section-kicker">Act I / The scrapbook</div><h2 id="scrapbook-title">Evidence of a very good life.</h2></div>
+          <p class="section-intro">Four little reminders that the best memories are usually the ones nobody planned.</p>
+        </div>
+        <div class="scrapbook-layout reveal reveal-delay-1">
+        <div>
+          <div class="stack-stage" id="memory-stack">
+            <article class="memory-card is-current"><div class="memory-image"><div class="memory-icon"><i data-lucide="laugh"></i></div></div><div class="memory-label"><span>01 / Yassine</span><span>somewhere, somehow</span></div><h3>“The joke was never that funny. We just committed.”</h3></article>
+            <article class="memory-card is-next"><div class="memory-image"><div class="memory-icon"><i data-lucide="coffee"></i></div></div><div class="memory-label"><span>02 / Elee</span><span>the usual place</span></div><h3>“For every tiny debrief that became a three-hour conversation.”</h3></article>
+            <article class="memory-card is-last"><div class="memory-image"><div class="memory-icon"><i data-lucide="sparkles"></i></div></div><div class="memory-label"><span>03 / Yassine</span><span>after midnight</span></div><h3>“You make ordinary Tuesdays feel like a story worth keeping.”</h3></article>
+            <article class="memory-card is-hidden"><div class="memory-image"><div class="memory-icon"><i data-lucide="heart"></i></div></div><div class="memory-label"><span>04 / Elee</span><span>always, really</span></div><h3>“The best part is still having more chapters to write.”</h3></article>
+          </div>
+          <div class="stack-controls"><button class="icon-button" id="prev-memory" aria-label="Previous memory"><i data-lucide="arrow-left"></i></button><button class="icon-button" id="next-memory" aria-label="Next memory"><i data-lucide="arrow-right"></i></button><span class="counter" id="memory-counter">01 / 04</span></div>
+        </div>
+        <aside class="memory-note"><p>Keep this part close.</p><small>There are people who make a room brighter just by being in it. You are one of them, Yosr. This is our small proof.</small></aside>
+        </div>
+      </div>
+      <div class="unlock-gate">
+        <div class="unlock-card">
+          <div class="lock-icon"><i data-lucide="key-round"></i></div>
+          <div class="section-kicker">A warm-up question</div>
+          <h3>Where did we always meet?</h3>
+          <p>One word opens the memories. Think of the place where “just five minutes” somehow became the whole day.</p>
+          <form data-unlock="scrapbook" data-password="buvette">
+            <label class="sr-only" for="scrapbook-password">Enter the memory password</label>
+            <input id="scrapbook-password" type="text" autocomplete="off" placeholder="type the secret word" required>
+            <button type="submit">Open</button>
+          </form>
+          <small class="unlock-hint">Hint: where we always meet.</small>
+        </div>
+      </div>
+    </section>
+
+    <section class="section booth-wrap is-locked" id="booth" aria-labelledby="booth-title">
+      <div class="section-content">
+        <div class="section-heading booth-heading reveal"><div><div class="section-kicker">Act II / The video booth</div><h2 id="booth-title">Two messages.<br>One very loud love.</h2></div><p class="section-intro">Press play on whichever tape you need first. The other one will still be here.</p></div>
+        <div class="booth-tabs reveal reveal-delay-1" role="tablist" aria-label="Video messages"><button class="tab" role="tab" aria-selected="true" aria-controls="yassine-tape" data-tape="yassine-tape">Yassine</button><button class="tab" role="tab" aria-selected="false" aria-controls="elee-tape" data-tape="elee-tape">Elee</button></div>
+        <div class="tape tape-yassine active reveal reveal-delay-2" id="yassine-tape" role="tabpanel"><div class="tape-screen"><video controls preload="metadata" playsinline aria-label="Yassine's birthday message"><source src="yassine.mp4" type="video/mp4">Your browser does not support video playback.</video></div><div class="tape-copy"><div class="role">Tape 01 / from Yassine</div><h3>For the girl who makes everything funnier.</h3><p>A birthday message from Yassine, recorded just for this little universe.</p><div class="tape-meta"><span>SP mode</span><span>with love</span></div></div></div>
+        <div class="tape tape-elee" id="elee-tape" role="tabpanel" hidden><div class="tape-screen"><video controls preload="metadata" playsinline aria-label="Elee's birthday message"><source src="elee.mp4" type="video/mp4">Your browser does not support video playback.</video></div><div class="tape-copy"><div class="role">Tape 02 / from Elee</div><h3>For the softest heart in the room.</h3><p>A birthday message from Elee, with all the affection and dramatic emphasis this birthday deserves.</p><div class="tape-meta"><span>LP mode</span><span>always yours</span></div></div></div>
+      </div>
+      <div class="unlock-gate">
+        <div class="unlock-card">
+          <div class="lock-icon"><i data-lucide="graduation-cap"></i></div>
+          <div class="section-kicker">A second little riddle</div>
+          <h3>Where did it all begin?</h3>
+          <p>The place that gave us hallways, bad coffee, accidental meetings, and the best kind of routine.</p>
+          <form data-unlock="booth" data-password="university">
+            <label class="sr-only" for="booth-password">Enter the second password</label>
+            <input id="booth-password" type="text" autocomplete="off" placeholder="type the place" required>
+            <button type="submit">Continue</button>
+          </form>
+          <small class="unlock-hint">Hint: where our story learned its first lines.</small>
+        </div>
+      </div>
+    </section>
+
+    <section class="finale is-locked" id="finale" aria-labelledby="finale-title">
+      <div class="section-content"><div class="finale-content reveal"><div class="section-kicker">Act III / The grand finale</div><h2 id="finale-title">Make a wish,<br><span>Yosr.</span></h2><p class="letter">May this next year bring you the kind of happiness that sneaks up on you, stays for dinner, and remembers your favorite song. We love you more than this page can hold.</p><button class="wish-button" id="wish-button"><i data-lucide="sparkles"></i> Make the wish real</button></div></div>
+      <div class="unlock-gate">
+        <div class="unlock-card">
+          <div class="lock-icon"><i data-lucide="heart"></i></div>
+          <div class="section-kicker">The last little door</div>
+          <h3>What stays after every chapter?</h3>
+          <p>Not a place this time. Just the thing we hope you feel, in every version of this story.</p>
+          <form data-unlock="finale" data-password="always">
+            <label class="sr-only" for="finale-password">Enter the final password</label>
+            <input id="finale-password" type="text" autocomplete="off" placeholder="type what stays" required>
+            <button type="submit">Reveal</button>
+          </form>
+          <small class="unlock-hint">Hint: a word bigger than goodbye.</small>
+        </div>
+      </div>
+    </section>
+  </main>
+  <footer>made with an unreasonable amount of love · yassine + elee · 2026</footer>
+  <script>
+    lucide.createIcons();
+    const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const progressFill = document.getElementById('journey-progress-fill');
+    const actMarkerLabel = document.getElementById('act-marker-label');
+    const hero = document.getElementById('hero');
+    const heroContent = document.querySelector('.hero-content');
+    const orbit = document.querySelector('.orbit');
+    const journeySections = [
+      { element: hero, label: 'the entrance' },
+      { element: document.getElementById('scrapbook'), label: 'act I / memories' },
+      { element: document.getElementById('booth'), label: 'act II / messages' },
+      { element: document.getElementById('finale'), label: 'act III / the wish' }
+    ];
+
+    document.querySelectorAll('.reveal').forEach(element => {
+      if (reducedMotion) element.classList.add('is-visible');
+    });
+    if (!reducedMotion && 'IntersectionObserver' in window) {
+      const revealObserver = new IntersectionObserver(entries => entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+          revealObserver.unobserve(entry.target);
+        }
+      }), { threshold: .18, rootMargin: '0px 0px -8% 0px' });
+      document.querySelectorAll('.reveal').forEach(element => revealObserver.observe(element));
+    }
+
+    let scrollFrame;
+    function updateJourneyMotion() {
+      const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
+      const progress = maxScroll > 0 ? Math.min(1, Math.max(0, window.scrollY / maxScroll)) : 0;
+      progressFill.style.transform = 'scaleX(' + progress + ')';
+      const current = journeySections.reduce((active, item) => {
+        return item.element.getBoundingClientRect().top <= window.innerHeight * .45 ? item : active;
+      }, journeySections[0]);
+      actMarkerLabel.textContent = current.label;
+      if (!reducedMotion) {
+        const heroProgress = Math.min(1, window.scrollY / window.innerHeight);
+        heroContent.style.transform = 'translateY(' + (heroProgress * 70) + 'px)';
+        orbit.style.transform = 'translateY(' + (heroProgress * 28) + 'px)';
+      }
+      scrollFrame = null;
+    }
+    window.addEventListener('scroll', () => {
+      if (!scrollFrame) scrollFrame = requestAnimationFrame(updateJourneyMotion);
+    }, { passive: true });
+    window.addEventListener('resize', updateJourneyMotion);
+    updateJourneyMotion();
+
+    const openButton = document.getElementById('open-button');
+    openButton.addEventListener('click', () => document.getElementById('scrapbook').scrollIntoView({ behavior: 'smooth' }));
+
+    document.querySelectorAll('[data-unlock]').forEach(form => form.addEventListener('submit', event => {
+      event.preventDefault();
+      const section = document.getElementById(form.dataset.unlock);
+      const input = form.querySelector('input');
+      const hint = form.parentElement.querySelector('.unlock-hint');
+      if (input.value.trim().toLowerCase() !== form.dataset.password) {
+        hint.textContent = 'Not quite. The clue is still here. Try again.';
+        hint.classList.add('unlock-error');
+        input.select();
+        return;
+      }
+      section.classList.remove('is-locked');
+      section.querySelector('.unlock-gate').hidden = true;
+      input.value = '';
+      setTimeout(() => section.scrollIntoView({ behavior: 'smooth' }), 80);
+    }));
+
+    const cards = [...document.querySelectorAll('.memory-card')];
+    const counter = document.getElementById('memory-counter');
+    let memoryIndex = 0;
+    function renderMemory() {
+      cards.forEach((card, index) => {
+        const position = (index - memoryIndex + cards.length) % cards.length;
+        card.className = 'memory-card ' + (position === 0 ? 'is-current' : position === 1 ? 'is-next' : position === 2 ? 'is-last' : 'is-hidden');
+      });
+      counter.textContent = String(memoryIndex + 1).padStart(2, '0') + ' / ' + String(cards.length).padStart(2, '0');
+    }
+    document.getElementById('next-memory').addEventListener('click', () => { memoryIndex = (memoryIndex + 1) % cards.length; renderMemory(); });
+    document.getElementById('prev-memory').addEventListener('click', () => { memoryIndex = (memoryIndex - 1 + cards.length) % cards.length; renderMemory(); });
+    document.addEventListener('keydown', (event) => { if (event.key === 'ArrowRight') { memoryIndex = (memoryIndex + 1) % cards.length; renderMemory(); } if (event.key === 'ArrowLeft') { memoryIndex = (memoryIndex - 1 + cards.length) % cards.length; renderMemory(); } });
+
+    document.querySelectorAll('.tab').forEach(tab => tab.addEventListener('click', () => {
+      document.querySelectorAll('.tab').forEach(item => item.setAttribute('aria-selected', String(item === tab)));
+      document.querySelectorAll('.tape').forEach(tape => { const active = tape.id === tab.dataset.tape; tape.classList.toggle('active', active); tape.hidden = !active; });
+    }));
+
+    document.getElementById('wish-button').addEventListener('click', () => {
+      confetti({ particleCount: 170, spread: 95, startVelocity: 32, origin: { y: .62 }, colors: ['#ff7b68', '#9a3f53', '#fff7e9', '#8f72ff', '#f7c873'] });
+      for (let index = 0; index < 18; index += 1) {
+        const heart = document.createElement('span'); heart.className = 'heart'; heart.innerHTML = '♥'; heart.style.left = (45 + Math.random() * 10) + 'vw'; heart.style.top = (55 + Math.random() * 10) + 'vh'; heart.style.fontSize = (14 + Math.random() * 20) + 'px'; heart.style.animationDelay = (Math.random() * .7) + 's'; document.body.appendChild(heart); setTimeout(() => heart.remove(), 3400);
+      }
+    });
+  </script>
+</body>
+</html>
