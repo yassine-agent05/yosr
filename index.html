@@ -129,9 +129,9 @@
     .tape { display: none; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); gap: 34px; align-items: center; padding: 20px; background: #24202f; border: 1px solid #41384d; }
     .tape.active { display: grid; animation: rise .4s ease both; }
     .tape-screen { min-height: 360px; display: grid; place-items: center; position: relative; overflow: hidden; background: radial-gradient(circle at 65% 30%, var(--screen-a), var(--screen-b) 70%); }
-    .tape-screen video { width: 100%; height: 100%; min-height: 360px; display: block; object-fit: cover; background: #09070d; }
-    .tape-screen::before { content: ''; position: absolute; inset: 0; opacity: .3; background: repeating-linear-gradient(0deg, transparent 0 3px, rgba(255,255,255,.18) 4px); mix-blend-mode: overlay; }
-    .tape-screen::after { content: 'REC  ●'; position: absolute; top: 16px; left: 18px; color: #ffb6ae; font: 11px var(--mono); letter-spacing: .1em; }
+    .tape-screen video { position: relative; z-index: 1; width: 100%; height: 100%; min-height: 360px; display: block; object-fit: cover; background: #09070d; }
+    .tape-screen::before { content: ''; position: absolute; z-index: 2; inset: 0; opacity: .3; background: repeating-linear-gradient(0deg, transparent 0 3px, rgba(255,255,255,.18) 4px); mix-blend-mode: overlay; pointer-events: none; }
+    .tape-screen::after { content: 'REC  ●'; position: absolute; z-index: 3; top: 16px; left: 18px; color: #ffb6ae; font: 11px var(--mono); letter-spacing: .1em; pointer-events: none; }
     .tape-screen .play { z-index: 1; width: 66px; height: 66px; border: 1px solid rgba(255,255,255,.6); border-radius: 50%; display: grid; place-items: center; background: rgba(255,255,255,.12); backdrop-filter: blur(8px); }
     .tape-copy { padding: 20px 20px 20px 8px; }
     .tape-copy .role { color: #ff9b8d; font: 11px var(--mono); text-transform: uppercase; letter-spacing: .15em; }
